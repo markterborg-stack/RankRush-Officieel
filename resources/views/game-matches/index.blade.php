@@ -1,9 +1,23 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2>
-            Wedstrijden
-        </h2>
+        
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+
+    <h2>
+        Wedstrijden
+    </h2>
+
+    <a
+        href="{{ route('game-matches.create') }}"
+        class="button"
+    >
+        + Wedstrijd aanmaken
+    </a>
+
+</div>
+
+
     </x-slot>
 
     <main>
