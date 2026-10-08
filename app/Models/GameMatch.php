@@ -32,16 +32,16 @@ class GameMatch extends Model
 
     public function poule(): BelongsTo
     {
-        return $this->BelongsTo(Poules::class);
+        return $this->BelongsTo(Poule::class);
     }
 
     public function team1(): BelongsTo
     {
-        return $this->BelongsTo(Teams::class, 'team1_id');
+        return $this->BelongsTo(Team::class, 'team1_id');
     }
 
     public function team2(): BelongsTo
     {
-        return $this->BelongsTo(Teams::class, 'team2_id');
+        return $this->BelongsTo(Team::class, 'team2_id');
     }
 }
