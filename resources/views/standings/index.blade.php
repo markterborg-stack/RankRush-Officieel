@@ -1,86 +1,83 @@
 <x-app-layout>
+
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             Klassement
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+    <main>
 
-            <div class="bg-white p-6 shadow-sm sm:rounded-lg">
+        <h2>
+            Stand
+        </h2>
 
-                <h3 class="text-lg font-semibold mb-6">
-                    Stand
-                </h3>
+        @if (count($standings) > 0)
 
-                @if (count($standings) > 0)
+            <table>
 
-                    <div class="overflow-x-auto">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Team</th>
+                        <th>W</th>
+                        <th>G</th>
+                        <th>V</th>
+                        <th>Punten</th>
+                    </tr>
+                </thead>
 
-                        <table class="w-full border-collapse">
+                <tbody>
 
-                            <thead>
-                                <tr class="border-b">
-                                    <th class="text-left py-3">#</th>
-                                    <th class="text-left py-3">Team</th>
-                                    <th class="text-left py-3">W</th>
-                                    <th class="text-left py-3">G</th>
-                                    <th class="text-left py-3">V</th>
-                                    <th class="text-left py-3">Punten</th>
-                                </tr>
-                            </thead>
+                    @foreach ($standings as $index => $standing)
 
-                            <tbody>
+                        <tr>
 
-                                @foreach ($standings as $index => $standing)
+                            <td>
+                                {{ $index + 1 }}
+                            </td>
 
-                                    <tr class="border-b">
+                            <td>
+                                <strong>
+                                    {{ $standing['team']->name }}
+                                </strong>
+                            </td>
 
-                                        <td class="py-3">
-                                            {{ $index + 1 }}
-                                        </td>
+                            <td>
+                                {{ $standing['wins'] }}
+                            </td>
 
-                                        <td class="py-3 font-semibold">
-                                            {{ $standing['team']->name }}
-                                        </td>
+                            <td>
+                                {{ $standing['draws'] }}
+                            </td>
 
-                                        <td class="py-3">
-                                            {{ $standing['wins'] }}
-                                        </td>
+                            <td>
+                                {{ $standing['losses'] }}
+                            </td>
 
-                                        <td class="py-3">
-                                            {{ $standing['draws'] }}
-                                        </td>
+                            <td>
+                                <strong>
+                                    {{ $standing['points'] }}
+                                </strong>
+                            </td>
 
-                                        <td class="py-3">
-                                            {{ $standing['losses'] }}
-                                        </td>
+                        </tr>
 
-                                        <td class="py-3 font-semibold">
-                                            {{ $standing['points'] }}
-                                        </td>
+                    @endforeach
 
-                                    </tr>
+                </tbody>
 
-                                @endforeach
+            </table>
 
-                            </tbody>
+        @else
 
-                        </table>
-
-                    </div>
-
-                @else
-
-                    <p>
-                        Er zijn nog geen teams of goedgekeurde uitslagen.
-                    </p>
-
-                @endif
-
+            <div class="notice">
+                Er zijn nog geen teams of goedgekeurde uitslagen.
             </div>
 
-        </div>
-    </div>
+        @endif
+
+    </main>
+
 </x-app-layout>
+

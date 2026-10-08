@@ -1,66 +1,78 @@
 <x-app-layout>
+
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             Mijn wedstrijden
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+    <main>
 
-            <div class="bg-white p-6 shadow-sm sm:rounded-lg">
+        <h2>
+            Wedstrijden van {{ $team->name }}
+        </h2>
 
-                <h3 class="text-lg font-semibold mb-6">
-                    Wedstrijden van {{ $team->name }}
+        @forelse ($matches as $match)
+
+            <div class="match">
+
+                <h3>
+                    {{ $match->team1->name }}
+                    vs.
+                    {{ $match->team2->name }}
                 </h3>
 
-                @forelse ($matches as $match)
+                <p>
+                    Seizoen: {{ $match->season->name }}
+                </p>
 
-                    <div class="border-b py-4">
+                <p>
+                    Poule: {{ $match->poule->name }}
+                </p>
 
-                        <p class="text-lg font-semibold">
-                            {{ $match->team1->name }}
-                            vs.
-                            {{ $match->team2->name }}
-                        </p>
+                <p>
+                    Datum:
+                    {{ $match->match_date->format('d-m-Y H:i') }}
+                </p>
 
-                        <p>
-                            Seizoen: {{ $match->season->name }}
-                        </p>
+                <p>
+                    Lobbycode:
+                </p>
 
-                        <p>
-                            Poule: {{ $match->poule->name }}
-                        </p>
+                @if ($match->lobby_code)
 
-                        <p>
-                            Datum:
-                            {{ $match->match_date->format('d-m-Y H:i') }}
-                        </p>
-
-                        <p>
-                            Lobbycode:
-                            {{ $match->lobby_code ?? 'Nog geen lobbycode' }}
-                        </p>
-
-                        <a
-                            href="{{ route('results.create', $match) }}"
-                            class="inline-block mt-3 px-4 py-2 bg-purple-600 text-white rounded-md"
-                        >
-                            Uitslag indienen
-                        </a>
-
+                    <div class="lobby">
+                        {{ $match->lobby_code }}
                     </div>
 
-                @empty
+                @else
 
-                    <p>
-                        Je team heeft nog geen wedstrijden.
+                    <p class="small">
+                        Nog geen lobbycode
                     </p>
 
-                @endforelse
+                @endif
+
+                <br>
+
+                <a
+                    href="{{ route('results.create', $match) }}"
+                    class="button"
+                >
+                    Uitslag indienen
+                </a>
 
             </div>
 
-        </div>
-    </div>
+        @empty
+
+            <div class="notice">
+                Je team heeft nog geen wedstrijden.
+            </div>
+
+        @endforelse
+
+    </main>
+
 </x-app-layout>
+

@@ -1,62 +1,84 @@
 <x-app-layout>
+
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             Uitslagen beheren
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+    <main>
 
-            <div class="bg-white p-6 shadow-sm sm:rounded-lg">
+        <h2>
+            Ingediende uitslagen
+        </h2>
 
-                <h3 class="text-lg font-semibold mb-6">
-                    Ingediende uitslagen
+        @forelse ($results as $result)
+
+            <div class="match">
+
+                <h3>
+                    {{ $result->match->team1->name }}
+                    {{ $result->team1_score }}
+                    -
+                    {{ $result->team2_score }}
+                    {{ $result->match->team2->name }}
                 </h3>
 
-                @forelse ($results as $result)
+                <p>
+                    Ingediend door:
+                    {{ $result->submitter->name }}
+                </p>
 
-                    <div class="border-b py-4">
+                <p>
+                    Status:
 
-                        <p class="font-semibold">
-                            {{ $result->match->team1->name }}
-                            {{ $result->team1_score }}
-                            -
-                            {{ $result->team2_score }}
-                            {{ $result->match->team2->name }}
-                        </p>
+                    @if ($result->status === 'pending')
 
-                        <p>
-                            Ingediend door:
-                            {{ $result->submitter->name }}
-                        </p>
+                        <span class="pending">
+                            In afwachting
+                        </span>
 
-                        <p>
-                            Status:
-                            {{ $result->status }}
-                        </p>
+                    @elseif ($result->status === 'approved')
 
-                        @if ($result->status === 'pending')
+                        <span class="status">
+                            Goedgekeurd
+                        </span>
 
-                    <div class="mt-3 flex gap-2">
+                    @else
 
-                        <form method="POST" action="{{ route('results.approve', $result) }}">
+                        <span class="danger">
+                            Afgewezen
+                        </span>
+
+                    @endif
+                </p>
+
+                @if ($result->status === 'pending')
+
+                    <div>
+
+                        <form
+                            method="POST"
+                            action="{{ route('results.approve', $result) }}"
+                            style="display: inline;"
+                        >
                             @csrf
 
-                            <button
-                                type="submit"
-                                class="px-4 py-2 bg-green-600 text-green rounded-md"
-                            >
+                            <button type="submit">
                                 Goedkeuren
                             </button>
                         </form>
 
-                        <form method="POST" action="{{ route('results.reject', $result) }}">
+                        <form
+                            method="POST"
+                            action="{{ route('results.reject', $result) }}"
+                            style="display: inline;"
+                        >
                             @csrf
 
                             <button
                                 type="submit"
-                                class="px-4 py-2 bg-red-600 text-white rounded-md"
+                                class="danger"
                             >
                                 Afwijzen
                             </button>
@@ -66,16 +88,16 @@
 
                 @endif
 
-                    </div>
-
-                @empty
-
-                    <p>Er zijn nog geen uitslagen ingediend.</p>
-
-                @endforelse
-
             </div>
 
-        </div>
-    </div>
+        @empty
+
+            <div class="notice">
+                Er zijn nog geen uitslagen ingediend.
+            </div>
+
+        @endforelse
+
+    </main>
+
 </x-app-layout>

@@ -1,65 +1,59 @@
 <x-app-layout>
+
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             Uitslag indienen
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+    <main>
 
-            <div class="bg-white p-6 shadow-sm sm:rounded-lg">
+        <div class="card">
 
-                <h3 class="text-lg font-semibold mb-4">
-                    {{ $gameMatch->team1->name }}
-                    vs.
-                    {{ $gameMatch->team2->name }}
-                </h3>
+            <h3>
+                {{ $gameMatch->team1->name }}
+                vs.
+                {{ $gameMatch->team2->name }}
+            </h3>
 
-                <form method="POST" action="{{ route('results.store', $gameMatch) }}">
-                    @csrf
+            <form
+                method="POST"
+                action="{{ route('results.store', $gameMatch) }}"
+            >
+                @csrf
 
-                    <div class="mb-4">
-                        <label for="team1_score" class="block font-medium">
-                            Score {{ $gameMatch->team1->name }}
-                        </label>
+                <label for="team1_score">
+                    Score {{ $gameMatch->team1->name }}
+                </label>
 
-                        <input
-                            type="number"
-                            name="team1_score"
-                            id="team1_score"
-                            min="0"
-                            required
-                            class="w-full border-gray-300 rounded-md"
-                        >
-                    </div>
+                <input
+                    type="number"
+                    name="team1_score"
+                    id="team1_score"
+                    min="0"
+                    required
+                >
 
-                    <div class="mb-4">
-                        <label for="team2_score" class="block font-medium">
-                            Score {{ $gameMatch->team2->name }}
-                        </label>
+                <label for="team2_score">
+                    Score {{ $gameMatch->team2->name }}
+                </label>
 
-                        <input
-                            type="number"
-                            name="team2_score"
-                            id="team2_score"
-                            min="0"
-                            required
-                            class="w-full border-gray-300 rounded-md"
-                        >
-                    </div>
+                <input
+                    type="number"
+                    name="team2_score"
+                    id="team2_score"
+                    min="0"
+                    required
+                >
 
-                    <button
-                        type="submit"
-                        class="px-4 py-2 bg-purple-600 text-white rounded-md"
-                    >
-                        Uitslag indienen
-                    </button>
+                <button type="submit">
+                    Uitslag indienen
+                </button>
 
-                </form>
-
-            </div>
+            </form>
 
         </div>
-    </div>
+
+    </main>
+
 </x-app-layout>

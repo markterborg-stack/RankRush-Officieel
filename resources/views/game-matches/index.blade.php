@@ -1,57 +1,69 @@
 <x-app-layout>
+
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             Wedstrijden
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+    <main>
 
-            <div class="bg-white p-6 shadow-sm sm:rounded-lg">
+        <h2>
+            Wedstrijden
+        </h2>
 
-                <h3 class="text-lg font-semibold mb-4">
-                    Wedstrijden
+        @forelse ($matches as $match)
+
+            <div class="match">
+
+                <h3>
+                    {{ $match->team1->name }}
+                    vs.
+                    {{ $match->team2->name }}
                 </h3>
 
-                @forelse ($matches as $match)
+                <p>
+                    Seizoen: {{ $match->season->name }}
+                </p>
 
-                    <div class="border-b py-4">
+                <p>
+                    Poule: {{ $match->poule->name }}
+                </p>
 
-                        <p class="font-semibold">
-                            {{ $match->team1->name }}
-                            vs.
-                            {{ $match->team2->name }}
-                        </p>
+                <p>
+                    Datum:
+                    {{ $match->match_date->format('d-m-Y H:i') }}
+                </p>
 
-                        <p>
-                            Seizoen: {{ $match->season->name }}
-                        </p>
+                <p>
+                    Lobbycode:
+                </p>
 
-                        <p>
-                            Poule: {{ $match->poule->name }}
-                        </p>
+                @if ($match->lobby_code)
 
-                        <p>
-                            Datum:
-                            {{ $match->match_date->format('d-m-Y H:i') }}
-                        </p>
-
-                        <p>
-                            Lobbycode:
-                            {{ $match->lobby_code ?? 'Geen lobbycode' }}
-                        </p>
-
+                    <div class="lobby">
+                        {{ $match->lobby_code }}
                     </div>
 
-                @empty
+                @else
 
-                    <p>Er zijn nog geen wedstrijden.</p>
+                    <p class="small">
+                        Geen lobbycode
+                    </p>
 
-                @endforelse
+                @endif
 
             </div>
 
-        </div>
-    </div>
+        @empty
+
+            <div class="notice">
+                Er zijn nog geen wedstrijden.
+            </div>
+
+        @endforelse
+
+    </main>
+
 </x-app-layout>
+

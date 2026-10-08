@@ -1,87 +1,104 @@
+
 <x-app-layout>
+
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+        <h2>
+            Dashboard
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <main>
 
-                    @if (session('success'))
-                        <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
-                            {{ session('success') }}
-                        </div>
+        @if (session('success'))
+            <div class="notice">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <h1>
+            Welkom, {{ auth()->user()->name }}!
+        </h1>
+
+        @if ($team)
+
+            <div class="cards">
+
+                <div class="card">
+                    <h3>Mijn team</h3>
+
+                    <p class="big-number">
+                        {{ $team->name }}
+                    </p>
+
+                    <p class="small">
+                        Teamcaptain: {{ auth()->user()->name }}
+                    </p>
+
+                    <a
+                        href="{{ route('teams.show', $team) }}"
+                        class="button"
+                    >
+                        Team bekijken
+                    </a>
+                </div>
+
+
+                <div class="card">
+                    <h3>Spelers</h3>
+
+                    @if ($team->players->count() > 0)
+
+                        <ul class="players">
+
+                            @foreach ($team->players as $player)
+
+                                <li>
+                                    {{ $player->name }}
+
+                                    <form
+                                        method="POST"
+                                        action="{{ route('players.destroy', $player) }}"
+                                        style="display: inline;"
+                                    >
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button
+                                            type="submit"
+                                            class="danger"
+                                        >
+                                            Verwijderen
+                                        </button>
+                                    </form>
+                                </li>
+
+                            @endforeach
+
+                        </ul>
+
+                    @else
+
+                        <p class="small">
+                            Je team heeft nog geen spelers.
+                        </p>
+
                     @endif
+                </div>
 
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 text-gray-900">
-
-                            <h1 class="text-2xl font-bold mb-6">
-                                Welkom, {{ auth()->user()->name }}!
-                            </h1>
-
-                            @if ($team)
-            <h2 class="text-xl font-semibold mb-2">
-                Mijn team
-            </h2>
-
-            <div class="border rounded-lg p-4 mb-6">
-                <p class="text-lg font-semibold">
-                    {{ $team->name }}
-                </p>
-
-                <p class="text-gray-600">
-                    Teamcaptain: {{ auth()->user()->name }}
-                </p>
             </div>
 
-                <a
-                    href="{{ route('teams.show', $team) }}"
-                    class="inline-block mt-3 px-4 py-2 bg-purple-600 text-black rounded-md"
+
+            <div class="card">
+
+                <h3>Speler toevoegen</h3>
+
+                <form
+                    method="POST"
+                    action="{{ route('players.store') }}"
                 >
-                    Team bekijken
-                </a>
+                    @csrf
 
-            <h2 class="text-xl font-semibold mb-4">
-                Spelers
-            </h2>
-
-            @if ($team->players->count() > 0)
-                <div class="space-y-2 mb-6">
-                    @foreach ($team->players as $player)
-                        <div class="flex items-center justify-between border rounded-lg p-3">
-                            <span>{{ $player->name }}</span>
-
-                            <form method="POST" action="{{ route('players.destroy', $player) }}">
-                                @csrf
-                                @method('DELETE')
-
-                                <button
-                                    type="submit"
-                                    class="text-red-600 hover:text-red-800"
-                                >
-                                    Verwijderen
-                                </button>
-                            </form>
-                        </div>
-                    @endforeach
-                </div>
-            @else
-                <p class="text-gray-600 mb-6">
-                    Je team heeft nog geen spelers.
-                </p>
-            @endif
-
-            <h2 class="text-xl font-semibold mb-4">
-                Speler toevoegen
-            </h2>
-
-            <form method="POST" action="{{ route('players.store') }}">
-                @csrf
-
-                <div class="mb-4">
-                    <label for="name" class="block font-medium text-sm text-gray-700">
+                    <label for="name">
                         Spelernaam
                     </label>
 
@@ -91,37 +108,45 @@
                         type="text"
                         value="{{ old('name') }}"
                         required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                     >
-                </div>
 
-                <button
-                    type="submit"
-                    class="px-4 py-2 bg-purple-600 text-white rounded-md"
-                >
-                    Speler toevoegen
-                </button>
-            </form>
-        @else
-            <h2 class="text-xl font-semibold mb-2">
-                Mijn team
-            </h2>
+                    @error('name')
+                        <p class="pending">
+                            {{ $message }}
+                        </p>
+                    @enderror
 
-            <p class="mb-4 text-gray-600">
-                Je hebt nog geen team.
-            </p>
+                    <button type="submit">
+                        Speler toevoegen
+                    </button>
 
-            <a
-                href="{{ route('teams.create') }}"
-                class="inline-block px-4 py-2 bg-purple-600 text-black rounded-md"
-            >
-                Team aanmaken
-            </a>
-                    @endif
+                </form>
 
-                </div>
             </div>
 
-        </div>
-    </div>
+
+        @else
+
+            <div class="card">
+
+                <h3>Mijn team</h3>
+
+                <p>
+                    Je hebt nog geen team.
+                </p>
+
+                <a
+                    href="{{ route('teams.create') }}"
+                    class="button"
+                >
+                    Team aanmaken
+                </a>
+
+            </div>
+
+        @endif
+
+    </main>
+
 </x-app-layout>
+
