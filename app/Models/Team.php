@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Team extends Model
 {
@@ -22,5 +23,10 @@ class Team extends Model
     public function players(): HasMany
     {
         return $this->hasMany(Player::class);
+    }
+
+    public function poules(): BelongsToMany
+    {
+        return $this->belongsToMany(Poule::class);
     }
 }
